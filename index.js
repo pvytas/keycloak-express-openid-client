@@ -10,9 +10,10 @@ import { engine } from 'express-handlebars';
 const app = express();
 
 // Register 'handelbars' extension with The Mustache Express
-app.engine('hbs', engine({extname:'hbs',
-        defaultLayout:'layout.hbs'
-    })
+app.engine('hbs', engine({
+    extname: 'hbs',
+    defaultLayout: 'layout.hbs'
+})
 );
 app.set('view engine', 'hbs');
 
@@ -28,30 +29,30 @@ const client = new keycloakIssuer.Client({
     redirect_uris: ['http://localhost:3000/auth/callback'],
     post_logout_redirect_uris: ['http://localhost:3000/logout/callback'],
     response_types: ['code'],
-  });
+});
 
 var memoryStore = new expressSession.MemoryStore();
 app.use(
     expressSession({
-    secret: 'another_long_secret',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore
+        secret: 'another_long_secret',
+        resave: false,
+        saveUninitialized: true,
+        store: memoryStore
     })
 );
 
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
-passport.use('oidc', new Strategy({client}, (tokenSet, userinfo, done)=>{
-        return done(null, tokenSet.claims());
-    })
+passport.use('oidc', new Strategy({ client }, (tokenSet, userinfo, done) => {
+    return done(null, tokenSet.claims());
+})
 )
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
     done(null, user);
-  });
-passport.deserializeUser(function(user, done) {
+});
+passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
@@ -65,16 +66,16 @@ app.get('/test', (req, res, next) => {
 // callback always routes to test 
 app.get('/auth/callback', (req, res, next) => {
     passport.authenticate('oidc', {
-      successRedirect: '/testauth',
-      failureRedirect: '/'
+        successRedirect: '/testauth',
+        failureRedirect: '/'
     })(req, res, next);
 });
 
 // function to check weather user is authenticated, req.isAuthenticated is populated by password.js
 // use this function to protect all routes
 var checkAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) { 
-        return next() 
+    if (req.isAuthenticated()) {
+        return next()
     }
     res.redirect("/test")
 }
@@ -88,7 +89,7 @@ app.get('/other', checkAuthenticated, (req, res) => {
 });
 
 //unprotected route
-app.get('/',function(req,res){
+app.get('/', function (req, res) {
     res.render('index');
 });
 
@@ -100,12 +101,17 @@ app.get('/logout', (req, res) => {
 // logout callback
 app.get('/logout/callback', (req, res) => {
     // clears the persisted user from the local storage
-    req.logout();
-    // redirects the user to a public route
-    res.redirect('/');
+    // req.logout();
+    // res.redirect('/');
+
+    req.logout(function (err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+    });
+    
 });
 
 app.listen(3000, function () {
-  console.log('Listening at http://localhost:3000');
+    console.log('Listening at http://localhost:3000');
 });
 
