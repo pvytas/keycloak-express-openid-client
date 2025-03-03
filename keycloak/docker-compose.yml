@@ -2,14 +2,17 @@ version: "3.7"
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.3
+    image: quay.io/keycloak/keycloak:26.1.3
     ports:
       - 8080:8080
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      KC_HOSTNAME: 172.208.26.77
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
     volumes:
       - ./keycloak_data:/opt/keycloak/data/
-    restart: always
     command:
       - "start-dev"
