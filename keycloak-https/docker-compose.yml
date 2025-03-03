@@ -1,0 +1,18 @@
+# version: "3.7"
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.3
+    ports:
+      - 8080:8080
+    container_name: keycloak
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/sslcerts/cert.pem
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/sslcerts/key.pem
+    volumes:
+      - ./keycloak_data:/opt/keycloak/data/
+      - ./sslcerts:/opt/keycloak/sslcerts
+    command:
+      - "start-dev"

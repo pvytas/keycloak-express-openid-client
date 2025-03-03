@@ -1,0 +1,1 @@
+A placeholder file so that the keycloak_data directory is not empty.
