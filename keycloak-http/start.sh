@@ -7,4 +7,4 @@ else
 fi
 
 sleep 1
-docker exec -it keycloak /bin/bash -c "cd /opt/keycloak/bin;./kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin;./kcadm.sh update realms/master -s sslRequired=NONE"
+docker exec -it keycloak /bin/bash -c "cd /opt/keycloak/bin; ./kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin; ./kcadm.sh update realms/master -s sslRequired=NONE"
