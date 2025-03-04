@@ -1,4 +1,4 @@
-
+t
 if ! command -v docker-compose &> /dev/null
 then
     docker compose  up -d
