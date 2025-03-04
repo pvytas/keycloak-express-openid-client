@@ -11,6 +11,7 @@ It is based on the code from https://github.com/austincunningham/keycloak-expres
 - npm v8 >
 - keycloak 26.0.0 or later
 
+
 ## Install
 
 ```bash
