@@ -4,12 +4,12 @@
 This project was created for learning about using Open ID Connect with Keycloak with a node.js application. 
 It is based on the code from https://github.com/austincunningham/keycloak-express-openid-client .
 
-How to use Keycloak in Express using OIDC
-
+>**NOTE:** Keycloak is [deprecating](https://www.keycloak.org/2022/02/adapter-d**eprecation) their client adapters (keycloak-connect) for Node and recommending openid-client as a replacement.
+>
 # Prerequisites
 - node v16 >
 - npm v8 >
-- keycloak 17.0.0 
+- keycloak 26.0.0 or later
 
 ## Install
 
@@ -18,14 +18,10 @@ npm install
 npm start
 ```
 
->**NOTE:** Keycloak is [deprecating](https://www.keycloak.org/2022/02/adapter-d**eprecation) their client adapters (keycloak-connect) for Node and recommending openid-client as a replacement.
+
 
 ## Setup Keycloak
-First I [download keycloak](https://www.keycloak.org/downloads) extract it and you can run it with the following command
-```bash
-bin/kc.sh start-dev
-```
-You can then login http://localhost:8080, first time you do keycloak asks you to set an admin user and password. 
+Login as admin in keycloak.
 
 Create a Realm and give it an name and create it. I am using keycloak-express for my realm name
 ![Create realm](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/e0erj948wmmrbng0v14l.gif)
