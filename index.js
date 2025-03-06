@@ -94,13 +94,13 @@ var checkAuthenticated = (req, res, next) => {
 
 app.get('/testauth', checkAuthenticated, (req, res) => {
     console.log('GET /testauth');
-    console.log('  req=', req);
+    console.log('  user=', req.user);
     res.render('test');
 });
 
 app.get('/other', checkAuthenticated, (req, res) => {
     console.log('GET /other');
-    console.log('  req=', req);
+    console.log('  user=', req.user);
     res.render('other');
 });
 
