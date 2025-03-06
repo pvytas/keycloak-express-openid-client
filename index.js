@@ -9,6 +9,7 @@ import { engine } from 'express-handlebars';
 
 const config = {
     keycloakBaseURL : process.env.KEYCLOAK_BASE_URL,
+    keycloakClientID : process.env.KEYCLOAK_CLIENT_ID,
     appHost : process.env.APP_HOST,
     appPort : process.env.APP_PORT
 };
@@ -33,7 +34,7 @@ const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/ke
 // console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
 
 const client = new keycloakIssuer.Client({
-    client_id: 'keycloak-express',
+    client_id: config.keycloakClientID,
     client_secret: 'long_secret-here',
     redirect_uris: [`http://${config.appHost}:${config.appPort}/auth/callback`],
     post_logout_redirect_uris: [`http://${config.appHost}:${config.appPort}/logout/callback`],
