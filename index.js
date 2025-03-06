@@ -92,20 +92,21 @@ var checkAuthenticated = (req, res, next) => {
 app.get('/testauth', checkAuthenticated, (req, res) => {
     console.log('GET /testauth');
     console.log('  user=', req.user);
-    res.render('test');
+
+    res.render('test', {username: req.user.name});
 });
 
 app.get('/other', checkAuthenticated, (req, res) => {
     console.log('GET /other');
     console.log('  user=', req.user);
-    res.render('other');
+    res.render('other', {username: req.user.name});
 });
 
 //unprotected route
 app.get('/', function (req, res) {
     console.log('GET /other');
     console.log('  user=', req.user);
-    res.render('index');
+    res.render('index', {username: "<no user>"});
 });
 
 // start logout request
