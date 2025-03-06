@@ -7,6 +7,14 @@ import expressSession from 'express-session';
 import { engine } from 'express-handlebars';
 
 
+const config = {
+    keycloakBaseURL : process.env.KEYCLOAK_BASE_URL,
+    appHost : process.env.APP_HOST,
+    appPort : process.env.APP_PORT
+};
+
+console.log('config=', config);
+
 const app = express();
 
 // Register 'handelbars' extension with The Mustache Express
@@ -18,7 +26,7 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 
 
-const keycloakIssuer = await Issuer.discover('http://localhost:8080/realms/keycloak-express')
+const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/keycloak-express');
 // don't think I should be console.logging this but its only a demo app
 // nothing bad ever happens from following the docs :)
 console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
@@ -26,8 +34,8 @@ console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.met
 const client = new keycloakIssuer.Client({
     client_id: 'keycloak-express',
     client_secret: 'long_secret-here',
-    redirect_uris: ['http://localhost:3000/auth/callback'],
-    post_logout_redirect_uris: ['http://localhost:3000/logout/callback'],
+    redirect_uris: [`http://${config.appHost}:${config.appPort}/auth/callback`],
+    post_logout_redirect_uris: [`http://${config.appHost}:${config.appPort}/logout/callback`],
     response_types: ['code'],
 });
 
