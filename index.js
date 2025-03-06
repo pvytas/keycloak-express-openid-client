@@ -83,9 +83,9 @@ app.get('/auth/callback', (req, res, next) => {
 // function to check weather user is authenticated, req.isAuthenticated is populated by password.js
 // use this function to protect all routes
 var checkAuthenticated = (req, res, next) => {
-    console.log(checkAuthenticated());
-    console.log('  req=', req);
-    
+    // console.log(checkAuthenticated());
+    // console.log('  req=', req);
+
     if (req.isAuthenticated()) {
         return next()
     }
