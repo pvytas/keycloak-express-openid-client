@@ -25,6 +25,7 @@ app.engine('hbs', engine({
 );
 app.set('view engine', 'hbs');
 
+console.log('calling Issuer.discover()');
 
 const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/keycloak-express');
 // don't think I should be console.logging this but its only a demo app
@@ -119,7 +120,7 @@ app.get('/logout/callback', (req, res) => {
     
 });
 
-app.listen(3000, function () {
-    console.log('Listening at http://localhost:3000');
+app.listen(config.appPort, function () {
+    console.log(`Listening at http://${config.appHost}:${config.appPort}`);
 });
 
