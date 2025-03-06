@@ -30,7 +30,7 @@ console.log('calling Issuer.discover()');
 const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/keycloak-express');
 // don't think I should be console.logging this but its only a demo app
 // nothing bad ever happens from following the docs :)
-console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
+// console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
 
 const client = new keycloakIssuer.Client({
     client_id: 'keycloak-express',
@@ -83,9 +83,6 @@ app.get('/auth/callback', (req, res, next) => {
 // function to check weather user is authenticated, req.isAuthenticated is populated by password.js
 // use this function to protect all routes
 var checkAuthenticated = (req, res, next) => {
-    // console.log(checkAuthenticated());
-    // console.log('  req=', req);
-
     if (req.isAuthenticated()) {
         return next()
     }
@@ -106,6 +103,8 @@ app.get('/other', checkAuthenticated, (req, res) => {
 
 //unprotected route
 app.get('/', function (req, res) {
+    console.log('GET /other');
+    console.log('  user=', req.user);
     res.render('index');
 });
 
