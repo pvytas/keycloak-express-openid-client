@@ -6,11 +6,40 @@ It is based on the code from https://github.com/austincunningham/keycloak-expres
 
 >**NOTE:** Keycloak is [deprecating](https://www.keycloak.org/2022/02/adapter-d**eprecation) their client adapters (keycloak-connect) for Node and recommending openid-client as a replacement.
 >
-# Prerequisites
-- node v16 >
-- npm v8 >
-- keycloak 26.0.0 or later
 
+# Overview
+This project contains a simple one file node.js web application that uses Keycloak authentications via OIDC.
+There are scripts to start two instances of this application to demonstrate SSO behaviour.
+Each instance listens on a separate HTTP port and is registered as a separate Client in Keycloak. 
+
+# Prerequisites
+- node v16 or later. Used node v22.14.0 in my own testing.
+- npm v8 or later. Used v10.9.2 in my own testing.
+- docker. Used v28.0.1 in my own testing.
+- docker compose command will download keycloack
+- open INBOUND port 8443 for the Keycloak UI
+- open INBOUND ports 3000 and 3001 for the two web apps 
+
+# Find your public IP address (or DNS name)
+The simplest approach is to run the Keycloak server and both web applications on the same server or VM.
+You will need to find the public IP of your server to register the web applications, and also for the applications to connect to Keycloak.
+  
+# Start and setup Keycloak
+The folder `keycloak-https` contains a docker script for starting keycloak in HTTPS mode with a self-signed certificate.
+It is possible to run keycloak in plain HTTP mode, but it requires that the web browser run on localhost.
+I was running this setup in an Azure VM and wanted to use the browser on my laptop, so I stuck with the HTTPS version for now.
+The `start.sh` and `stop.sh` scripts can be used to start and stop the keycloak server and internally invoke `docker-compose.yml`.
+The `keycloak_data` folder is used to persist that state of keycloak so the settings don't disappear after `stop.sh`
+
+```
+cd keycloak-https
+./start.sh
+```
+
+The initial admin user and password is defined in the `docker-compose.yml` file and can be changed by editing this file. 
+
+After starting keycloak, point your browser to 
+# 
 ## Install
 
 ```bash
