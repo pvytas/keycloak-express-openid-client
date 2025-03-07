@@ -55,14 +55,25 @@ app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
 passport.use('oidc', new Strategy({ client }, (tokenSet, userinfo, done) => {
+    console.log("Strategy()");
+    console.log("tokenSet = ",tokenSet);
+    console.log("userinfo = ",userinfo);
     return done(null, tokenSet.claims());
 })
 )
 
 passport.serializeUser(function (user, done) {
+    console.log('-----------------------------');
+    console.log('serialize user');
+    console.log(user);
+    console.log('-----------------------------');
     done(null, user);
 });
 passport.deserializeUser(function (user, done) {
+    console.log('-----------------------------');
+    console.log('deserialize user');
+    console.log(user);
+    console.log('-----------------------------');
     done(null, user);
 });
 
@@ -70,11 +81,13 @@ passport.deserializeUser(function (user, done) {
 
 // default protected route /test
 app.get('/test', (req, res, next) => {
+    console.log('GET /test  - calling passport.authenticate.');
     passport.authenticate('oidc')(req, res, next);
 });
 
 // callback always routes to test 
 app.get('/auth/callback', (req, res, next) => {
+    console.log('GET /auth/callback  - calling passport.authenticate.');
     passport.authenticate('oidc', {
         successRedirect: '/testauth',
         failureRedirect: '/'
