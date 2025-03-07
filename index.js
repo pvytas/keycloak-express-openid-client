@@ -63,17 +63,17 @@ passport.use('oidc', new Strategy({ client }, (tokenSet, userinfo, done) => {
 )
 
 passport.serializeUser(function (user, done) {
-    console.log('-----------------------------');
+    // console.log('-----------------------------');
     console.log('serialize user');
-    console.log(user);
-    console.log('-----------------------------');
+    // console.log(user);
+    // console.log('-----------------------------');
     done(null, user);
 });
 passport.deserializeUser(function (user, done) {
-    console.log('-----------------------------');
+    // console.log('-----------------------------');
     console.log('deserialize user');
-    console.log(user);
-    console.log('-----------------------------');
+    // console.log(user);
+    // console.log('-----------------------------');
     done(null, user);
 });
 
@@ -106,6 +106,7 @@ var checkAuthenticated = (req, res, next) => {
 app.get('/testauth', checkAuthenticated, (req, res) => {
     console.log('GET /testauth');
     console.log('  user=', req.user);
+    console.log('  req.session=', req.session);
 
     res.render('test', {username: req.user.name});
 });
@@ -114,7 +115,7 @@ app.get('/other', checkAuthenticated, (req, res) => {
     console.log('GET /other');
     console.log('  user=', req.user);
     res.render('other', {username: req.user.name});
-});
+}); 
 
 //unprotected route
 app.get('/', function (req, res) {
