@@ -38,7 +38,10 @@ cd keycloak-https
 
 The initial admin user and password is defined in the `docker-compose.yml` file and can be changed by editing this file. 
 
-After starting keycloak, point your browser to 
+After starting keycloak, point your browser to `https://172.208.26.77:8443/` (replace IP address with your server's address).
+This is using a self-signed certificate, so your browser will likely display a warning about this.
+Login as `admin` / `admin` (replace with your own admin userid / password)
+
 # 
 ## Install
 
