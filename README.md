@@ -36,39 +36,26 @@ cd keycloak-https
 ./start.sh
 ```
 
-The initial admin user and password is defined in the `docker-compose.yml` file and can be changed by editing this file. 
+The initial admin user and password is defined in the `docker-compose.yml` file and can be changed by editing this file.
 
-After starting keycloak, point your browser to `https://<host-ip-address>:8443/`.
+## Setup Keycloak
+Point your browser to `https://<host-ip-address>:8443/`.
 This is using a self-signed certificate, so your browser will likely display a warning about this.
 Login as `admin` / `admin` (replace with your own admin userid / password)
 
-# 
-## Install
+Create a keycloak realm
+* click on the "Select realm" drop down menu in the upper left hand corner of the Keycloak and press the "Add realm" button. Enter the realm name "keycloak-express". This is the default realm in the node.js web app configuration. 
 
-```bash
-npm install
-npm start
-```
+Create a Client using openid-connect
+* make sure that the realm "keycloak-express" is selected then in the sidebar click on "Clients" to see a list of clients then press the "Create client" button.
+* for the "General settings" select the client type "OpenID Connect" and Client ID "keycloak-express" and Name "keycloak-express"
+* set the "Valid Redirect URI" to "http://<host-ip-address>:3000/*" (our demo app is configured for port 3000). For simplicity we are using a wild card for the route (not a recommended practice).
+* leave the other parameters with their default value. The keycloak Authentication flow "Standard flow" corresponds to the OIDC 'Authorization Code Flow'.
+* create another client named "keycloak-express-3001" using the "Valid Redirect URI" set to "http://<host-ip-address>:3001/*". This is for running the second instance of our demo app.
 
-
-
-## Setup Keycloak
-Login as admin in keycloak.
-
-Create a Realm and give it an name and create it. I am using keycloak-express for my realm name
-![Create realm](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/e0erj948wmmrbng0v14l.gif)
-
-The create a Client using openid-connect in the Realm
-![Create a client](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/wctbp51o639k3hgu16q0.gif)
-
-Set the Valid Redirect URIs and select save, 
-![set valid redirect URIs](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/07crr8q4tmtovxodehgq.gif)
-
->**NOTE**:you can specify specific routes here but I am using a wild card(not recommend best practice)
-
-Create a user its documented [here](https://www.keycloak.org/docs/latest/server_admin/index.html#proc-creating-user_server_administration_guide) so I won't go into it.
-
-That's it for Keycloak setup 
+Create a user 
+* while in the realm "keycloak-express", click on the "Users" item in the sidebar.
+* click the button "Add user", enter the details for the new user then click the "Save" button. After saving the details, the Management page for the new user is displayed.
 
 ## Setup Openid-client with Passport in Express
 
