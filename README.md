@@ -57,32 +57,12 @@ Create a user
 * while in the realm "keycloak-express", click on the "Users" item in the sidebar.
 * click the button "Add user", enter the details for the new user then click the "Save" button. After saving the details, the Management page for the new user is displayed.
 
-# Setup Openid-client with Passport in Express
-
-The demo node.js web app uses [openid-client](https://www.npmjs.com/package/openid-client) and [passport](https://www.npmjs.com/package/passport) to connect to keycloak.
-
-From the Realm we need the openid-configuration which can be retreived using the Keycloak endpoint 
+# Run one demo instance
+Start one instance of the demo web app
 ```
-/realms/{realm-name}/.well-known/openid-configuration
+./start-3000.sh
 ```
-So in our case the realm name is keycloak-express so the url will be `http://<host-ip-address>:8443/realms/keycloak-express/.well-known/openid-configuration` .
-
-All we need is to call the Issuer.discover function to connect openid-client to keycloak
-
-```js
-'use strict';
-
-import express from 'express';
-import { Issuer, Strategy } from 'openid-client';
-import passport from 'passport';
-import expressSession from 'express-session';
-
-const app = express();
-
-// use the issuer url here
-const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/keycloak-express');
-
-```
+Then open a browser 
 
 ## Views and login flow
 
