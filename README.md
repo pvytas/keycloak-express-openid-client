@@ -24,7 +24,7 @@ Each instance listens on a separate HTTP port and is registered as a separate Cl
 The simplest approach is to run the Keycloak server and both web applications on the same server or VM.
 You will need to find the public IP of your server to register the web applications, and also for the applications to connect to Keycloak.
   
-# Start and setup Keycloak
+# Start Keycloak
 The folder `keycloak-https` contains a docker script for starting keycloak in HTTPS mode with a self-signed certificate.
 It is possible to run keycloak in plain HTTP mode, but it requires that the web browser run on localhost.
 I was running this setup in an Azure VM and wanted to use the browser on my laptop, so I stuck with the HTTPS version for now.
@@ -38,7 +38,7 @@ cd keycloak-https
 
 The initial admin user and password is defined in the `docker-compose.yml` file and can be changed by editing this file.
 
-## Setup Keycloak
+# Setup Keycloak
 Point your browser to `https://<host-ip-address>:8443/`.
 This is using a self-signed certificate, so your browser will likely display a warning about this.
 Login as `admin` / `admin` (replace with your own admin userid / password)
@@ -57,17 +57,17 @@ Create a user
 * while in the realm "keycloak-express", click on the "Users" item in the sidebar.
 * click the button "Add user", enter the details for the new user then click the "Save" button. After saving the details, the Management page for the new user is displayed.
 
-## Setup Openid-client with Passport in Express
+# Setup Openid-client with Passport in Express
 
-We are going to use this [openid-client](https://www.npmjs.com/package/openid-client) and [passport](https://www.npmjs.com/package/passport) to connect to keycloak.
+The demo node.js web app uses [openid-client](https://www.npmjs.com/package/openid-client) and [passport](https://www.npmjs.com/package/passport) to connect to keycloak.
 
-From the Realm we need the openid-configuration can be got an endpoint 
+From the Realm we need the openid-configuration which can be retreived using the Keycloak endpoint 
 ```
 /realms/{realm-name}/.well-known/openid-configuration
 ```
-So in my case the realm name is keycloak-express so the url will be http://localhost:8080/realms/keycloak-express/.well-known/openid-configuration the output is as follows
-![.well-known url output](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ruaxgvsvycdhubwhm7b1.png) 
-All we need for is the `issuer:"http://localhost:8080/realms/keycloak-express"` url to connect openid-client to keycloak as follows
+So in our case the realm name is keycloak-express so the url will be `http://<host-ip-address>:8443/realms/keycloak-express/.well-known/openid-configuration` .
+
+All we need is to call the Issuer.discover function to connect openid-client to keycloak
 
 ```js
 'use strict';
@@ -80,18 +80,8 @@ import expressSession from 'express-session';
 const app = express();
 
 // use the issuer url here
-const keycloakIssuer = await Issuer.discover('http://localhost:8080/realms/keycloak-express');
+const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/keycloak-express');
 
-
-// client_id and client_secret can be what ever you want
-// may be worth setting them up as env vars 
-const client = new keycloakIssuer.Client({
-    client_id: 'keycloak-express',
-    client_secret: 'long_secret-here',
-    redirect_uris: ['http://localhost:3000/auth/callback'],
-    post_logout_redirect_uris: ['http://localhost:3000/logout/callback'],
-    response_types: ['code'],
-  });
 ```
 
 ## Views and login flow
