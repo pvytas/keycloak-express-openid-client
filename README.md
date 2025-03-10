@@ -69,8 +69,15 @@ Click the 'Test' button in the upper right hand corner and this will redirect th
 
 Now open a browser tab to the Keycloak URL `https://<host-ip-address>:8443/` and login as admin. Then select the "keycloak-express" realm and click on "Sessions" in the sidebar. This will list all the users that are currently logged in to this realm.
 
-# Run a second demo instance
-
+# Run a second demo instance with SSO
+Keep the first terminal session running and don't log out of the web app just yet.
+Open a new terminal session on your <host-ip-address>.
+Edit the `start-3001.sh` file to set the IP address in the Keycloak base URL and the IP address for the server that will be running the demo web app. 
+Start a second instance of the demo web app
+```
+./start-3001.sh
+```
+Then open a new browser tab and navigate to `http://<host-ip-address>:3001/`. It will display a web page with a title bar displaying your username and the body displaying "Welcome to Keycloak-Express". The second web app has recognized your userid using SSO with Keycloak withoug having to login again.
 
 ## Views and login flow
 
