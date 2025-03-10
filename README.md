@@ -63,7 +63,7 @@ Start one instance of the demo web app
 ```
 ./start-3000.sh
 ```
-Then open a browser to `http://<host-ip-address>:3000/`. It will display a web page with a title bar displaying "Keycloak-Express : user=<no user>" and the body displaying "Welcome to Keycloak-Express".
+Then open a browser to `http://<host-ip-address>:3000/`. It will display a web page with a title bar displaying "Keycloak-Express : user=\<no user\>" and the body displaying "Welcome to Keycloak-Express".
 
 Click the 'Test' button in the upper right hand corner and this will redirect the browser to the Keycloak login page. Log in with the user credentials that you created in the "Setup Keycloak" section and the browser will redirect to our web app page "Welcome to Keycloak-Express Demo" and the title bar displays your username.
 
