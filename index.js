@@ -29,8 +29,6 @@ app.set('view engine', 'hbs');
 console.log('calling Issuer.discover()');
 
 const keycloakIssuer = await Issuer.discover(config.keycloakBaseURL + 'realms/keycloak-express');
-// don't think I should be console.logging this but its only a demo app
-// nothing bad ever happens from following the docs :)
 // console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
 
 const client = new keycloakIssuer.Client({
@@ -56,8 +54,10 @@ app.use(passport.authenticate('session'));
 
 passport.use('oidc', new Strategy({ client }, (tokenSet, userinfo, done) => {
     console.log("Strategy()");
+    // here is where we can get a copy of the access, refresh and ID tokens
     console.log("tokenSet = ",tokenSet);
     console.log("userinfo = ",userinfo);
+
     return done(null, tokenSet.claims());
 })
 )
@@ -119,9 +119,13 @@ app.get('/other', checkAuthenticated, (req, res) => {
 
 //unprotected route
 app.get('/', function (req, res) {
-    console.log('GET /other');
+    console.log('GET /');
     console.log('  user=', req.user);
-    res.render('index', {username: "<no user>"});
+    if (req.user) {
+        res.render('index', {username: req.user.name});
+    } else {
+        res.render('index', {username: "<no user>"});
+    }
 });
 
 // start logout request
@@ -132,9 +136,6 @@ app.get('/logout', (req, res) => {
 // logout callback
 app.get('/logout/callback', (req, res) => {
     // clears the persisted user from the local storage
-    // req.logout();
-    // res.redirect('/');
-
     req.logout(function (err) {
         if (err) { return next(err); }
         res.redirect('/');
