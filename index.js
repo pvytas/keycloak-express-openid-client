@@ -82,6 +82,7 @@ passport.deserializeUser(function (user, done) {
 // default protected route /test
 app.get('/test', (req, res, next) => {
     console.log('GET /test  - calling passport.authenticate.');
+    console.log('  req.rawHeaders=', req.rawHeaders);
     passport.authenticate('oidc')(req, res, next);
 });
 
