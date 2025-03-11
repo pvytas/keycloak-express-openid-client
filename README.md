@@ -25,7 +25,7 @@ The simplest approach is to run the Keycloak server and both web applications on
 You will need to find the public IP of your server to register the web applications, and also for the applications to connect to Keycloak.
   
 # Start Keycloak
-The folder `keycloak-https` contains a docker script for starting keycloak in HTTPS mode with a self-signed certificate.
+The folder `keycloak-https` contains a script and a docker-compose file for starting keycloak in a docker container in HTTPS mode with a self-signed certificate.
 It is possible to run keycloak in plain HTTP mode, but it requires that the web browser run on localhost.
 I was running this setup in an Azure VM and wanted to use the browser on my laptop, so I stuck with the HTTPS version for now.
 The `start.sh` and `stop.sh` scripts can be used to start and stop the keycloak server and internally invoke `docker-compose.yml`.
@@ -41,7 +41,7 @@ The initial admin user and password is defined in the `docker-compose.yml` file 
 # Setup Keycloak
 Point your browser to `https://<host-ip-address>:8443/`.
 This is using a self-signed certificate, so your browser will likely display a warning about this.
-Login as `admin` / `admin` (replace with your own admin userid / password)
+Login as `admin` (using the admin userid / password you defined in the docker-compose file)
 
 Create a keycloak realm
 * click on the "Select realm" drop down menu in the upper left hand corner of the Keycloak and press the "Add realm" button. Enter the realm name "keycloak-express". This is the default realm in the node.js web app configuration. 
@@ -58,11 +58,26 @@ Create a user
 * click the button "Add user", enter the details for the new user then click the "Save" button. After saving the details, the Management page for the new user is displayed.
 
 # Run one demo instance
+Edit the `start-3000.sh` file to set the IP address in the Keycloak base URL and the IP address for the server that will be running the demo web app. 
 Start one instance of the demo web app
 ```
 ./start-3000.sh
 ```
-Then open a browser 
+Then open a browser to `http://<host-ip-address>:3000/`. It will display a web page with a title bar displaying "Keycloak-Express : user=\<no user\>" and the body displaying "Welcome to Keycloak-Express".
+
+Click the 'Test' button in the upper right hand corner and this will redirect the browser to the Keycloak login page. Log in with the user credentials that you created in the "Setup Keycloak" section and the browser will redirect to our web app page "Welcome to Keycloak-Express Demo" and the title bar displays your username.
+
+Now open a browser tab to the Keycloak URL `https://<host-ip-address>:8443/` and login as admin. Then select the "keycloak-express" realm and click on "Sessions" in the sidebar. This will list all the users that are currently logged in to this realm.
+
+# Run a second demo instance with SSO
+Keep the first terminal session running and don't log out of the web app just yet.
+Open a new terminal session on your <host-ip-address>.
+Edit the `start-3001.sh` file to set the IP address in the Keycloak base URL and the IP address for the server that will be running the demo web app. 
+Start a second instance of the demo web app
+```
+./start-3001.sh
+```
+Then open a new browser tab and navigate to `http://<host-ip-address>:3001/`. It will display a web page with a title bar displaying your username and the body displaying "Welcome to Keycloak-Express". The second web app has recognized your userid using SSO with Keycloak withoug having to login again.
 
 ## Views and login flow
 

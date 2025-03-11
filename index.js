@@ -39,6 +39,19 @@ const client = new keycloakIssuer.Client({
     response_types: ['code'],
 });
 
+/*
+express-session is used to manage the user session.
+It directly reads and writes cookies on req/res to store the sessionID.
+Session data is stored server-side.
+
+Warning The default server-side session storage, MemoryStore, 
+is purposely not designed for a production environment. 
+It will leak memory under most conditions, does not scale past a single process, 
+and is meant for debugging and developing.
+
+The default name for the session cookie is 'connect.sid'.
+*/
+
 var memoryStore = new expressSession.MemoryStore();
 app.use(
     expressSession({
